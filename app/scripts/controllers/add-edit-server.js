@@ -18,7 +18,7 @@ angular.module('mycsServersApp')
         healthcheckPath: '/healthcheck'
       };
     } else {
-      this.findOne({
+      serversService.findOne({
         id: _.parseInt(id)
       }).then(function (server) {
         $scope.server = server;

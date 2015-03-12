@@ -1,7 +1,7 @@
 # Mycs Servers
+[![Build Status](https://secure.travis-ci.org/mehranhatami/mycs-servers.png?branch=master)](http://travis-ci.org/mehranhatami/mycs-servers)
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.11.1.
+# To do
 
 ## Build & development
 
