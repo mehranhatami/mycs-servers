@@ -1,7 +1,3 @@
-<div class="controls">
-  <p class="form-control-static">Lorem Ipsum and then some</p>
-</div>
-
 <form>
   <div class="form-group">
     <div class="input-group">
@@ -20,18 +16,27 @@
       <span class="input-group-addon">Status:</span>
       <input type="text" class="form-control" id="server-status" placeholder="Offline/Online" ng-model="server.status" >
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="checkAvailability()">Availability?</button>
+        <button class="btn btn-default" type="button" ng-click="checkAvailability()">
+          <span ng-hide="loadingAvailability">Availability?</span>
+          <i ng-show="loadingAvailability" class="icon-spinner icon-spin"></i>
+        </button>
       </span>
     </div>
   </div>
   <div class="form-group">
     <div class="input-group">
       <span class="input-group-addon">
-        <input type="checkbox" ng-model="server.hasHealthcheck">
+        <input type="checkbox" ng-change="changeHealthcheck()" ng-model="server.hasHealthcheck">
       </span>
-      <input type="text" class="form-control" id="server-healthcheck-url" placeholder="/healthcheck" ng-model="server.healthcheckPath" >
-      <span class="input-group-btn" ng-show="server.hasHealthcheck">
-        <button class="btn btn-default live-healthcheck" type="button" ng-click="healthcheck()">Healthcheck?</button>
+      <input type="text" class="form-control" placeholder="/healthcheck" ng-model="server.healthcheckPath" >
+      <span class="input-group-btn" ng-show="healthcheckUrl()">
+        <button class="btn btn-default live-healthcheck" type="button" ng-click="healthcheck()">
+          <!-- <span ng-hide="loadingHealthcheck">Healthcheck?</span> -->
+          <span ng-hide="loadingHealthcheck" class="glyphicon glyphicon-heart{{ server.notHealthy ? '-empty': '' }}">
+            <input type="checkbox" hidden ng-model="server.notHealthy">
+          </span>
+          <i ng-show="loadingHealthcheck" class="icon-spinner icon-spin"></i>
+        </button>
       </span>
     </div>
   </div>

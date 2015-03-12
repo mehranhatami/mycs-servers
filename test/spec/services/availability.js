@@ -19,6 +19,10 @@ describe('Service: availability', function () {
     expect(typeof availability.check).toBe('function');
   });
 
+  it('availability.checkServer to check the actual state of the server', function () {
+    expect(typeof availability.checkServer).toBe('function');
+  });
+
   it('availability.get to get the actual healthcheck json object', function () {
     expect(typeof availability.get).toBe('function');
   });
@@ -26,5 +30,4 @@ describe('Service: availability', function () {
   it('availability.healthcheck which broadcasts the "modal-show" on the desired scope!', function () {
     expect(typeof availability.healthcheck).toBe('function');
   });
-
 });

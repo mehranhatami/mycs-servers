@@ -8,9 +8,11 @@
  * Controller of the mycsServersApp
  */
 angular.module('mycsServersApp')
-  .controller('ServersCtrl', function ($scope, serversService, availability) {
+  .controller('ServersCtrl', function ($scope, $rootScope, serversService, availability) {
     $scope.servers = [];
     $scope.serversCount = 0;
+    $scope.loadingHealthcheck = {};
+    $scope.loadingAvailability = {};
 
     $scope.load = function () {
       $scope.loading = true;
@@ -22,11 +24,53 @@ angular.module('mycsServersApp')
       });
     };
 
-    $scope.healthcheck = function (id) {
-      serversService.findOne({
-        id: id
-      }).then(function (server) {
-        availability.healthcheck($scope, server);
+    $scope.checkAll = function () {
+      _.forEach($scope.servers, function (server, index) {
+        $scope.checkAvailability(index);
+      });
+    };
+
+    $scope.checkAvailability = function (index) {
+      $scope.loadingAvailability[index] = true;
+      availability.checkServer($scope.servers[index])
+        .then(function () {
+          $scope.loadingAvailability[index] = false;
+        });
+    };
+
+    $scope.checkAll = function () {
+      _.forEach($scope.servers, function (server, index) {
+        $scope.checkAvailability(index);
+      });
+    };
+
+    $scope.healthcheck = function (index, broadcast) {
+      $scope.loadingHealthcheck[index] = true;
+      availability.healthcheck($scope.servers[index], broadcast)
+        .then(function (healthInfo) {
+          var server = $scope.servers[index];
+          server.notHealthy = !(healthInfo && healthInfo.database && healthInfo.database.healthy);
+          $scope.loadingHealthcheck[index] = false;
+        });
+    };
+
+    function doRemove(index) {
+      var server = $scope.servers[index];
+      serversService.remove({
+        id: server.id
+      }, true).then(function () {
+        serversService.commit();
+        $scope.load();
+      });
+    }
+
+    $scope.remove = function (index) {
+      $rootScope.$broadcast('confirm-show', {
+        message: 'Are you sure? You are about to delete a server.',
+        action: function () {
+          doRemove(index);
+          $rootScope.$broadcast('confirm-hide');
+        }
       });
     };
 

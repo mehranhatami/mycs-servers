@@ -9,7 +9,6 @@
  */
 angular.module('mycsServersApp')
   .factory('serversService', function (db) {
-
     return {
       count: function (predicate) {
         return db.servers.count(predicate);

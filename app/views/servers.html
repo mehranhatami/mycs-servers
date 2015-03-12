@@ -1,38 +1,47 @@
 <h1>
-    Mycs Servers(<span ng-show="loading"><i class="icon-spinner icon-spin icon-large"></i>
+    Mycs Servers(<span ng-show="loading"><i class="icon-spinner icon-spin"></i>
       </span><a
         help-text="Click to reload the failed jobs count" help=""
         ng-click="load()"
         ng-hide="loading">{{serversCount}}</a>)
-  </h1>
+</h1>
+<p>
+  Online/Offline/Healthy
+</p>
+<p>
+  Sort: Online, 
+</p>
 <table class="table table-bordered table-hover table-condensed">
   <thead>
     <tr>
-      <th>Server ID<span ng-show="loading"><i class="icon-spinner icon-spin icon-large"></i></span>
-      </th>
+      <th>Server ID</th>
       <th>Name</th>
       <th>Url</th>
       <th>Healthcheck?</th>
-      <th>Status</th>
+      <th>
+        Status(<a ng-click="checkAll()">
+          <span>live check</span>
+          <span class="glyphicon glyphicon-cloud-download"></span>
+        </a>)
+      </th>
       <th align="center">
         <a href="#/servers/add">
           <span class="glyphicon glyphicon-plus-sign"></span>
         </a>
       </th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr ng-hide="servers.length">
-      <td colspan="6">
-        <span ng-show="loading">
-          <i class="icon-spinner icon-spin icon-large">&nbsp;</i> loading servers...
-        </span>
+      <td colspan="7">
+        <span ng-show="loading"><i class="icon-spinner icon-spin"></i> loading servers...</span>
         <span ng-hide="loading">
           There is no Mycs Server added to the list.
         </span>
       </td>
     </tr>
-    <tr data-ng-repeat="server in servers">
+    <tr data-ng-repeat="server in servers track by $index">
       <td>
         #{{ server.id }}
       </td>
@@ -43,15 +52,24 @@
         {{ server.url }}
       </td>
       <td align="center">
-        <a ng-show="{{ server.hasHealthcheck }}" ng-click="healthcheck({{ server.id }})" target="blank">
-          <span class="glyphicon glyphicon glyphicon-heart"></span>
+        <a ng-show="{{ server.hasHealthcheck }}" ng-click="healthcheck($index, true)">
+          <span ng-hide="loadingHealthcheck[$index]" class="glyphicon glyphicon-heart{{ server.notHealthy ? '-empty': '' }}"></span>
         </a>
+        <i ng-show="loadingHealthcheck[$index]" class="icon-spinner icon-spin"></i>
       </td>
       <td>
-        {{ server.status }}
+        <a ng-click="checkAvailability($index)">
+          <span ng-hide="loadingAvailability[$index]">{{ server.status }}</span>
+        </a>
+        <i ng-show="loadingAvailability[$index]" class="icon-spinner icon-spin"></i>
       </td>
       <td align="center">
         <a ng-href="#/servers/{{ server.id }}"><span class="glyphicon glyphicon-edit"></span></a>
+      </td>
+      <td align="center">
+        <a ng-click="remove($index)">
+          <span class="glyphicon glyphicon-remove"></span>
+        </a>
       </td>
     </tr>
   </tbody>

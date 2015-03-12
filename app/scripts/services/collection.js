@@ -43,15 +43,20 @@ angular.module('mycsServersApp')
 
     Collection.prototype.store = function (name) {
       var key = prefix + name,
-        deferred = $q.defer();
-
-      storage.get(key).then(function (data) {
-        if (_.isArray(data)) {
-          deferred.resolve(data);
-        } else {
-          deferred.resolve([]);
-        }
-      });
+        deferred = $q.defer(),
+        promise;
+      try {
+        promise = storage.get(key);
+        promise.then(function (data) {
+          if (_.isArray(data)) {
+            deferred.resolve(data);
+          } else {
+            deferred.resolve([]);
+          }
+        });
+      } catch (err) {
+        deferred.reject(err);
+      }
       return deferred.promise;
     };
 

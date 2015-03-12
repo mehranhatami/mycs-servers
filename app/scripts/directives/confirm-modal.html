@@ -1,0 +1,15 @@
+<div class="modal fade confirm-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        {{ data.message }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="data.action()" class="btn btn-default">Ok</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
