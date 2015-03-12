@@ -1,0 +1,42 @@
+<div class="healthcheck-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="healthcheckModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="healthcheckModalLabel">Mycs Server Healthcheck Details</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="health-ping" class="control-label">Ping:</label>
+            <input type="text" class="form-control" id="health-ping" ng-model="data.ping" />
+          </div>
+          <div class="form-group">
+            <label for="health-environment" class="control-label">Environment:</label>
+            <input type="text" class="form-control" id="health-environment" ng-model="data.environment" />
+          </div>
+          <div class="form-group">
+            <label for="health-timestamp" class="control-label">Timestamp:</label>
+            <input type="text" class="form-control" id="health-timestamp" ng-model="data.timestamp" />
+          </div>
+          <div class="form-group">
+            <label for="health-uptime" class="control-label">Uptime:</label>
+            <input type="text" class="form-control" id="health-uptime" ng-model="data.uptime" />
+          </div>
+          <div class="form-group">
+            <label for="health-dbname" class="control-label">Database Name:</label>
+            <input type="text" class="form-control" id="health-dbname" ng-model="data.database.dbname" />
+          </div>
+          <div class="form-group">
+            <label for="health-dbhealthy" class="control-label">Is database healthy?</label>
+            <input type="checkbox" class="form-control" id="health-dbhealthy" ng-model="data.database.healthy" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

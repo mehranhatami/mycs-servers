@@ -1,0 +1,30 @@
+body a {
+  color: #2d343e;
+  cursor: pointer;
+  will-change: color, text-decoration;
+}
+.header .logo-buttons-container {
+  height: 51px;
+}
+.header .logo-buttons-container .logo-container {
+  height: 50px;
+  width: 179px;
+  background: #2E3136;
+  position: relative;
+  display: inline-block;
+  zoom: 1;
+}
+/*@media screen and (max-width: 1199px) and (min-width: 992px) {
+  .header .logo-buttons-container .logo-container img {
+    left: 34px;
+  }
+}*/
+
+.header .logo-buttons-container .logo-container img {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

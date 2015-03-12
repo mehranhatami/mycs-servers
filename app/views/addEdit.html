@@ -1,0 +1,49 @@
+<div class="controls">
+  <p class="form-control-static">Lorem Ipsum and then some</p>
+</div>
+
+<form>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon">Name:</span>
+      <input type="text" class="form-control" id="server-name" ng-model="server.name" >
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon">Url:</span>
+      <input type="text" class="form-control" id="server-url" placeholder="http://0.0.0.0" ng-model="server.url" >
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon">Status:</span>
+      <input type="text" class="form-control" id="server-status" placeholder="Offline/Online" ng-model="server.status" >
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="checkAvailability()">Availability?</button>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox" ng-model="server.hasHealthcheck">
+      </span>
+      <input type="text" class="form-control" id="server-healthcheck-url" placeholder="/healthcheck" ng-model="server.healthcheckPath" >
+      <span class="input-group-btn" ng-show="server.hasHealthcheck">
+        <button class="btn btn-default live-healthcheck" type="button" ng-click="healthcheck()">Healthcheck?</button>
+      </span>
+    </div>
+  </div>
+</form>
+<div class="form-actions">
+  <button ng-click="save()" class="btn btn-default">
+    {{action}}
+  </button>
+  <button class="btn btn-default">
+    <a ng-href="#/servers">
+    Cancel
+    </a>
+  </button>
+</div>
+<healthcheck-details></healthcheck-details>
