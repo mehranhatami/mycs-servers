@@ -357,6 +357,12 @@ module.exports = function (grunt) {
         cwd: '<%= config.app %>/images',
         src: '{,*/}*.{png,jpg,jpeg,gif}',
         dest: '<%= config.dist %>/images'
+      },
+      directives: {
+        expand: true,
+        cwd: '<%= config.app %>/scripts/directives',
+        src: '{,*/}*.{html,htm,css}',
+        dest: '<%= config.dist %>/scripts/directives'
       }
     },
 
@@ -370,7 +376,8 @@ module.exports = function (grunt) {
       ],
       dist: [
         'copy:styles',
-        'copy:images'
+        'copy:images',
+        'copy:directives'
       ]
     },
 

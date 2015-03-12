@@ -19,6 +19,6 @@ describe('Controller: MainCtrl', function () {
 
   it('should attach a list of awesomeThings to the scope', function () {
     expect(scope.tasks.length).toBeGreaterThan(3);
-    expect(objToString.call(scope.tasks)).toBe('[object Array]');
+    expect(_.isArray(scope.tasks)).toBe(true);
   });
 });

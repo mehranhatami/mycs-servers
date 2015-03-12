@@ -31,7 +31,6 @@
       <input type="text" class="form-control" placeholder="/healthcheck" ng-model="server.healthcheckPath" >
       <span class="input-group-btn" ng-show="healthcheckUrl()">
         <button class="btn btn-default live-healthcheck" type="button" ng-click="healthcheck()">
-          <!-- <span ng-hide="loadingHealthcheck">Healthcheck?</span> -->
           <span ng-hide="loadingHealthcheck" class="glyphicon glyphicon-heart{{ server.notHealthy ? '-empty': '' }}">
             <input type="checkbox" hidden ng-model="server.notHealthy">
           </span>
