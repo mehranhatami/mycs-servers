@@ -9,5 +9,7 @@
  */
 angular.module('mycsServersApp')
   .controller('AboutCtrl', function ($scope) {
-    
+    $scope.load = function(){
+      
+    };
   });

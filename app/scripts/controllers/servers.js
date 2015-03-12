@@ -8,7 +8,25 @@
  * Controller of the mycsServersApp
  */
 angular.module('mycsServersApp')
-  .controller('ServersCtrl', function ($scope, $rootScope, serversService, availability) {
+  .controller('ServersCtrl', function ($scope, $routeParams, $rootScope, serversService, availability) {
+    var filterParams = {};
+
+    if ($routeParams.online) {
+      filterParams.status = 'Online';
+    } else if ($routeParams.offline) {
+      filterParams.status = 'Offline';
+    }
+
+    if ($routeParams.healthy) {
+      filterParams.notHealthy = false;
+    } else if ($routeParams.nothealthy) {
+      filterParams.notHealthy = true;
+    }
+
+    if ($routeParams.healthcheck) {
+      filterParams.hasHealthcheck = true;
+    }
+
     $scope.servers = [];
     $scope.serversCount = 0;
     $scope.loadingHealthcheck = {};
@@ -17,7 +35,7 @@ angular.module('mycsServersApp')
     $scope.load = function () {
       $scope.loading = true;
 
-      serversService.find().then(function (servers) {
+      serversService.find(filterParams).then(function (servers) {
         $scope.loading = false;
         $scope.serversCount = servers.length;
         $scope.servers = servers;
@@ -36,12 +54,6 @@ angular.module('mycsServersApp')
         .then(function () {
           $scope.loadingAvailability[index] = false;
         });
-    };
-
-    $scope.checkAll = function () {
-      _.forEach($scope.servers, function (server, index) {
-        $scope.checkAvailability(index);
-      });
     };
 
     $scope.healthcheck = function (index, broadcast) {

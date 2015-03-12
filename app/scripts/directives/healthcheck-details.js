@@ -7,13 +7,12 @@
  * # healthcheckDetails
  */
 angular.module('mycsServersApp')
-  .directive('healthcheckDetails', function ($rootScope) {
+  .directive('healthcheckDetails', function () {
     return {
       templateUrl: 'scripts/directives/healthcheck-details.html',
       restrict: 'E',
-      link: function postLink(scope, element, attrs) {
-        var healthModal =  element.find('>.healthcheck-modal');
-        
+      link: function postLink(scope, element) {
+        var healthModal = element.find('>.healthcheck-modal');
         scope.$on('modal-show', function (event, data) {
           scope.data = data;
           healthModal.modal('show');

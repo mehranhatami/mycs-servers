@@ -11,13 +11,12 @@ angular.module('mycsServersApp')
     return {
       templateUrl: 'scripts/directives/confirm-modal.html',
       restrict: 'E',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope, element) {
         var confirmModal =  element.find('>.confirm-modal');
         scope.$on('confirm-show', function (event, data) {
           scope.data = data;
           confirmModal.modal('show');
         });
-
         scope.$on('confirm-hide', function () {
           confirmModal.modal('hide');
         });

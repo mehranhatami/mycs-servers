@@ -12,7 +12,6 @@ angular.module('mycsServersApp')
     var id = $routeParams.id;
 
     $scope.action = id === 'add' ? 'Add' : 'Update';
-
     $scope.loadingHealthcheck = false;
     $scope.loadingAvailability = false;
 
@@ -36,10 +35,12 @@ angular.module('mycsServersApp')
 
     if (id === 'add') {
       init({});
-    } else {
+    } else if (!_.isNaN(_.parseInt(id))) {
       serversService.findOne({
         id: _.parseInt(id)
       }).then(init);
+    } else {
+      $location.path('/servers');
     }
 
     $scope.healthcheckUrl = function () {
@@ -74,6 +75,6 @@ angular.module('mycsServersApp')
         .catch(function () {
           $scope.server.notHealthy = true;
           $scope.loadingHealthcheck = false;
-        })
+        });
     };
   });

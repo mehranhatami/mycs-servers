@@ -8,8 +8,7 @@
  * Controller of the mycsServersApp
  */
 angular.module('mycsServersApp')
-  .controller('MainCtrl', function ($scope, $q, serversService) {
-    
+  .controller('MainCtrl', function ($scope) {
     $scope.tasks = [
       'Add, modify or remove a server.',
       'Display a list of all servers and their statuses.',
