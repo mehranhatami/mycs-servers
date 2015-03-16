@@ -9,12 +9,8 @@ describe('Controller: AddEditServerCtrl', function () {
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
-    scope = $rootScope.$new();
-    scope.id = '1';
-    AddEditServerCtrl = $controller('AddEditServerCtrl', {
-      $scope: scope
-    });
+  beforeEach(inject(function ($controller) {
+    scope = $controller('AddEditServerCtrl');
   }));
 
   it('AddEditServerCtrl is responsible for adding and editing servers', function () {

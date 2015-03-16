@@ -9,11 +9,8 @@ describe('Controller: AboutCtrl', function () {
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
-    scope = $rootScope.$new();
-    AboutCtrl = $controller('AboutCtrl', {
-      $scope: scope
-    });
+  beforeEach(inject(function ($controller) {
+    scope = $controller('AboutCtrl');
   }));
 
   it('The initial setup works for testing', function () {

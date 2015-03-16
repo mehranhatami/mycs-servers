@@ -7,9 +7,13 @@
  * # AboutCtrl
  * Controller of the mycsServersApp
  */
+function AboutCtrl() {
+
+}
+
+AboutCtrl.prototype.load = function () {
+
+};
+
 angular.module('mycsServersApp')
-  .controller('AboutCtrl', function ($scope) {
-    $scope.load = function(){
-      
-    };
-  });
+  .controller('AboutCtrl', AboutCtrl);

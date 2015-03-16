@@ -7,74 +7,85 @@
  * # AddEditServerCtrl
  * Controller of the mycsServersApp
  */
-angular.module('mycsServersApp')
-  .controller('AddEditServerCtrl', function ($scope, $rootScope, $location, $routeParams, serversService, availability) {
-    var id = $routeParams.id;
+function AddEditServerCtrl($location, $routeParams, serversService, availability) {
+  var id = $routeParams.id;
 
-    $scope.action = id === 'add' ? 'Add' : 'Update';
-    $scope.loadingHealthcheck = false;
-    $scope.loadingAvailability = false;
+  this.action = id === 'add' ? 'Add' : 'Update';
+  this.loadingHealthcheck = false;
+  this.loadingAvailability = false;
 
-    $scope.changeHealthcheck = function () {
-      if ($scope.server && $scope.server.hasHealthcheck) {
-        if ($scope.origHealthcheckPath) {
-          $scope.server.healthcheckPath = $scope.origHealthcheckPath;
-        } else {
-          $scope.server.healthcheckPath = '/healthcheck';
-        }
-      } else {
-        $scope.server.healthcheckPath = '';
-      }
-    };
+  this.goToServers = _.bind($location.path, $location, '/servers');
 
-    function init(server) {
-      $scope.server = server;
-      $scope.origHealthcheckPath = server.healthcheckPath;
-      $scope.changeHealthcheck();
-    }
+  if (id === 'add') {
+    this.init({});
+  } else if (!_.isNaN(_.parseInt(id))) {
+    serversService.findOne({
+      id: _.parseInt(id)
+    }).then(_.bind(this.init, this));
+  } else {
+    this.goToServers();
+  }
 
-    if (id === 'add') {
-      init({});
-    } else if (!_.isNaN(_.parseInt(id))) {
-      serversService.findOne({
-        id: _.parseInt(id)
-      }).then(init);
+  //Utilities
+  _.extend(this, serversService);
+  _.extend(this, availability);
+}
+
+AddEditServerCtrl.prototype.init = function (server) {
+  this.server = server;
+  this.origHealthcheckPath = server.healthcheckPath;
+  this.changeHealthcheck();
+};
+
+AddEditServerCtrl.prototype.changeHealthcheck = function () {
+  if (this.server && this.server.hasHealthcheck) {
+    if (this.origHealthcheckPath) {
+      this.server.healthcheckPath = this.origHealthcheckPath;
     } else {
-      $location.path('/servers');
+      this.server.healthcheckPath = '/healthcheck';
     }
+  } else {
+    this.server.healthcheckPath = '';
+  }
+};
 
-    $scope.healthcheckUrl = function () {
-      if ($scope.server && $scope.server.url && $scope.server.healthcheckPath) {
-        return $scope.server.url + $scope.server.healthcheckPath;
-      }
-    };
+AddEditServerCtrl.prototype.healthcheckUrl = function () {
+  if (this.server && this.server.url && this.server.healthcheckPath) {
+    return this.server.url + this.server.healthcheckPath;
+  }
+};
 
-    $scope.save = function () {
-      serversService.saveOrUpdate($scope.server)
-        .then(function () {
-          serversService.commit();
-          $location.path('/servers');
-        });
-    };
+AddEditServerCtrl.prototype.save = function () {
+  var that = this;
+  this.saveOrUpdate(this.server)
+    .then(function () {
+      that.commit();
+      that.goToServers();
+    });
+};
 
-    $scope.checkAvailability = function () {
-      $scope.loadingAvailability = true;
-      availability.checkServer($scope.server)
-        .then(function () {
-          $scope.loadingAvailability = false;
-        });
-    };
+AddEditServerCtrl.prototype.checkAvailability = function () {
+  var that = this;
+  this.loadingAvailability = true;
+  this.checkServer(this.server)
+    .then(function () {
+      that.loadingAvailability = false;
+    });
+};
 
-    $scope.healthcheck = function () {
-      $scope.loadingHealthcheck = true;
-      availability.healthcheck($scope.server, true)
-        .then(function (healthInfo) {
-          $scope.server.notHealthy = !(healthInfo && healthInfo.database && healthInfo.database.healthy);
-          $scope.loadingHealthcheck = false;
-        })
-        .catch(function () {
-          $scope.server.notHealthy = true;
-          $scope.loadingHealthcheck = false;
-        });
-    };
-  });
+AddEditServerCtrl.prototype.runHealthcheck = function () {
+  var that = this;
+  this.loadingHealthcheck = true;
+  this.healthcheck(this.server, true)
+    .then(function (healthInfo) {
+      that.server.notHealthy = !(healthInfo && healthInfo.database && healthInfo.database.healthy);
+      that.loadingHealthcheck = false;
+    })
+    .catch(function () {
+      that.server.notHealthy = true;
+      that.loadingHealthcheck = false;
+    });
+};
+
+angular.module('mycsServersApp')
+  .controller('AddEditServerCtrl', AddEditServerCtrl);

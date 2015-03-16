@@ -1,75 +1,78 @@
-<h1>
-    Mycs Servers(<span ng-show="loading"><i class="icon-spinner icon-spin"></i>
+<div ng-controller="ServersCtrl as ctrl">
+  <h1>
+    Mycs Servers(<span ng-show="ctrl.loading"><i class="icon-spinner icon-spin"></i>
       </span><a
         help-text="Click to reload the failed jobs count" help=""
-        ng-click="load()"
-        ng-hide="loading">{{serversCount}}</a>)
+        ng-click="ctrl.load()"
+        ng-hide="ctrl.loading">{{ ctrl.serversCount }}</a>)
 </h1>
-<p>
-  Filters: <a href="/#/servers">All</a>/<a href="/#/servers?online">Online</a>/<a href="/#/servers?offline">Offline</a>/<a href="/#/servers?healthy">Healthy</a>/<a href="/#/servers?nothealthy">Not healthy</a>/<a href="/#/servers?healthcheck">Has healthcheck</a>
-</p>
-<table class="table table-bordered table-hover table-condensed">
-  <thead>
-    <tr>
-      <th>Server ID</th>
-      <th>Name</th>
-      <th>Url</th>
-      <th>Healthcheck?</th>
-      <th>
-        Status(<a ng-click="checkAll()">
-          <span>live check</span>
-          <span class="glyphicon glyphicon-cloud-download"></span>
-        </a>)
-      </th>
-      <th align="center">
-        <a href="#/servers/add">
-          <span class="glyphicon glyphicon-plus-sign"></span>
-        </a>
-      </th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-hide="servers.length">
-      <td colspan="7">
-        <span ng-show="loading"><i class="icon-spinner icon-spin"></i> loading servers...</span>
-        <span ng-hide="loading">
+  <p>
+    Filters: <a href="/#/servers">All</a>/<a href="/#/servers?online">Online</a>/<a href="/#/servers?offline">Offline</a>/<a href="/#/servers?healthy">Healthy</a>/<a href="/#/servers?nothealthy">Not healthy</a>/<a href="/#/servers?healthcheck">Has healthcheck</a>
+  </p>
+  <table class="table table-bordered table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Server ID</th>
+        <th>Name</th>
+        <th>Url</th>
+        <th>Healthcheck?</th>
+        <th>
+          Status(
+          <a ng-click="ctrl.checkAll()">
+            <span>live check</span>
+            <span class="glyphicon glyphicon-cloud-download"></span>
+          </a>)
+        </th>
+        <th align="center">
+          <a href="#/servers/add">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+          </a>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-hide="ctrl.servers.length">
+        <td colspan="7">
+          <span ng-show="ctrl.loading"><i class="icon-spinner icon-spin"></i> loading servers...</span>
+          <span ng-hide="ctrl.loading">
           There is no Mycs Server added to the list.
         </span>
-      </td>
-    </tr>
-    <tr data-ng-repeat="server in servers track by $index">
-      <td>
-        #{{ server.id }}
-      </td>
-      <td>
-        {{ server.name }}
-      </td>
-      <td>
-        {{ server.url }}
-      </td>
-      <td align="center">
-        <a ng-show="{{ server.hasHealthcheck }}" ng-click="healthcheck($index, true)">
-          <span ng-hide="loadingHealthcheck[$index]" class="glyphicon glyphicon-heart{{ server.notHealthy ? '-empty': '' }}"></span>
-        </a>
-        <i ng-show="loadingHealthcheck[$index]" class="icon-spinner icon-spin"></i>
-      </td>
-      <td>
-        <a ng-click="checkAvailability($index)">
-          <span ng-hide="loadingAvailability[$index]">{{ server.status }}</span>
-        </a>
-        <i ng-show="loadingAvailability[$index]" class="icon-spinner icon-spin"></i>
-      </td>
-      <td align="center">
-        <a ng-href="#/servers/{{ server.id }}"><span class="glyphicon glyphicon-edit"></span></a>
-      </td>
-      <td align="center">
-        <a ng-click="remove($index)">
-          <span class="glyphicon glyphicon-remove"></span>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<!-- <div paginator total-pages="totalPages" current-page="pageNumber"></div> -->
-<healthcheck-details></healthcheck-details>
+        </td>
+      </tr>
+      <tr data-ng-repeat="server in ctrl.servers track by $index">
+        <td>
+          #{{ server.id }}
+        </td>
+        <td>
+          {{ server.name }}
+        </td>
+        <td>
+          {{ server.url }}
+        </td>
+        <td align="center">
+          <a ng-show="{{ server.hasHealthcheck }}" ng-click="ctrl.runHealthcheck($index, true)">
+            <span ng-hide="ctrl.loadingHealthcheck[$index]" class="glyphicon glyphicon-heart{{ server.notHealthy ? '-empty': '' }}"></span>
+          </a>
+          <i ng-show="ctrl.loadingHealthcheck[$index]" class="icon-spinner icon-spin"></i>
+        </td>
+        <td>
+          <a ng-click="ctrl.checkAvailability($index)">
+            <span ng-hide="ctrl.loadingAvailability[$index]">{{ server.status }}</span>
+          </a>
+          <i ng-show="ctrl.loadingAvailability[$index]" class="icon-spinner icon-spin"></i>
+        </td>
+        <td align="center">
+          <a ng-href="#/servers/{{ server.id }}"><span class="glyphicon glyphicon-edit"></span></a>
+        </td>
+        <td align="center">
+          <a ng-click="ctrl.removeServer($index)">
+            <span class="glyphicon glyphicon-remove"></span>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <div paginator total-pages="totalPages" current-page="pageNumber"></div> -->
+  <healthcheck-details></healthcheck-details>
+</div>

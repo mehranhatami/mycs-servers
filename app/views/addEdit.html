@@ -1,53 +1,55 @@
-<form>
-  <div class="form-group">
-    <div class="input-group">
-      <span class="input-group-addon">Name:</span>
-      <input type="text" class="form-control" id="server-name" ng-model="server.name" >
+<div ng-controller="AddEditServerCtrl as main">
+  <form>
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">Name:</span>
+        <input type="text" class="form-control" id="server-name" ng-model="main.server.name">
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="input-group">
-      <span class="input-group-addon">Url:</span>
-      <input type="text" class="form-control" id="server-url" placeholder="http://0.0.0.0" ng-model="server.url" >
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">Url:</span>
+        <input type="text" class="form-control" id="main.server-url" placeholder="http://0.0.0.0" ng-model="main.server.url">
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="input-group">
-      <span class="input-group-addon">Status:</span>
-      <input type="text" class="form-control" id="server-status" placeholder="Offline/Online" ng-model="server.status" >
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="checkAvailability()">
-          <span ng-hide="loadingAvailability">Availability?</span>
-          <i ng-show="loadingAvailability" class="icon-spinner icon-spin"></i>
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">Status:</span>
+        <input type="text" class="form-control" id="main.server-status" placeholder="Offline/Online" ng-model="main.server.status">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="main.checkAvailability()">
+          <span ng-hide="main.loadingAvailability">Availability?</span>
+        <i ng-show="main.loadingAvailability" class="icon-spinner icon-spin"></i>
         </button>
-      </span>
+        </span>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="input-group">
-      <span class="input-group-addon">
-        <input type="checkbox" ng-change="changeHealthcheck()" ng-model="server.hasHealthcheck">
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">
+        <input type="checkbox" ng-change="main.changeHealthcheck()" ng-model="main.server.hasHealthcheck">
       </span>
-      <input type="text" class="form-control" placeholder="/healthcheck" ng-model="server.healthcheckPath" >
-      <span class="input-group-btn" ng-show="healthcheckUrl()">
-        <button class="btn btn-default live-healthcheck" type="button" ng-click="healthcheck()">
-          <span ng-hide="loadingHealthcheck" class="glyphicon glyphicon-heart{{ server.notHealthy ? '-empty': '' }}">
-            <input type="checkbox" hidden ng-model="server.notHealthy">
+        <input type="text" class="form-control" placeholder="/healthcheck" ng-model="main.server.healthcheckPath">
+        <span class="input-group-btn" ng-show="main.healthcheckUrl()">
+        <button class="btn btn-default live-healthcheck" type="button" ng-click="main.runHealthcheck()">
+          <span ng-hide="main.loadingHealthcheck" class="glyphicon glyphicon-heart{{ main.server.notHealthy ? '-empty': '' }}">
+            <input type="checkbox" hidden ng-model="main.server.notHealthy">
           </span>
-          <i ng-show="loadingHealthcheck" class="icon-spinner icon-spin"></i>
+        <i ng-show="main.loadingHealthcheck" class="icon-spinner icon-spin"></i>
         </button>
-      </span>
+        </span>
+      </div>
     </div>
-  </div>
-</form>
-<div class="form-actions">
-  <button ng-click="save()" class="btn btn-default">
-    {{action}}
-  </button>
-  <button class="btn btn-default">
-    <a ng-href="#/servers">
+  </form>
+  <div class="form-actions">
+    <button ng-click="main.save()" class="btn btn-default">
+      {{ main.action }}
+    </button>
+    <button class="btn btn-default">
+      <a ng-href="#/servers">
     Cancel
     </a>
-  </button>
+    </button>
+  </div>
+  <healthcheck-details></healthcheck-details>
 </div>
-<healthcheck-details></healthcheck-details>

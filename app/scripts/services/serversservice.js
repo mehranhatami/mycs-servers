@@ -9,7 +9,7 @@
  */
 angular.module('mycsServersApp')
   .factory('serversService', function (db) {
-    return {
+    var serversService = {
       count: function (predicate) {
         return db.servers.count(predicate);
       },
@@ -30,15 +30,16 @@ angular.module('mycsServersApp')
       },
       saveOrUpdate: function (server) {
         if (typeof server.id === 'number') {
-          return this.update({
+          return serversService.update({
             id: server.id
           }, server);
         } else {
-          return this.save(server);
+          return serversService.save(server);
         }
       },
       commit: function () {
         return db.servers.save();
       }
     };
+    return serversService;
   });

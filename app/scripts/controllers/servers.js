@@ -7,84 +7,99 @@
  * # ServersCtrl
  * Controller of the mycsServersApp
  */
-angular.module('mycsServersApp')
-  .controller('ServersCtrl', function ($scope, $routeParams, $rootScope, serversService, availability) {
-    var filterParams = {};
+function ServersCtrl($routeParams, $rootScope, serversService, availability) {
+  this.parseRouteParams($routeParams);
+  this.servers = [];
+  this.serversCount = 0;
+  this.loadingHealthcheck = {};
+  this.loadingAvailability = {};
 
-    if ($routeParams.online) {
-      filterParams.status = 'Online';
-    } else if ($routeParams.offline) {
-      filterParams.status = 'Offline';
-    }
+  this.broadcast = _.bind($rootScope.$broadcast, $rootScope);
 
-    if ($routeParams.healthy) {
-      filterParams.notHealthy = false;
-    } else if ($routeParams.nothealthy) {
-      filterParams.notHealthy = true;
-    }
+  _.extend(this, serversService);
+  _.extend(this, availability);
 
-    if ($routeParams.healthcheck) {
-      filterParams.hasHealthcheck = true;
-    }
+  this.load();
+}
 
-    $scope.servers = [];
-    $scope.serversCount = 0;
-    $scope.loadingHealthcheck = {};
-    $scope.loadingAvailability = {};
+ServersCtrl.prototype.parseRouteParams = function ($routeParams) {
+  this.filterParams = {};
 
-    $scope.load = function () {
-      $scope.loading = true;
+  if ($routeParams.online) {
+    this.filterParams.status = 'Online';
+  } else if ($routeParams.offline) {
+    this.filterParams.status = 'Offline';
+  }
 
-      serversService.find(filterParams).then(function (servers) {
-        $scope.loading = false;
-        $scope.serversCount = servers.length;
-        $scope.servers = servers;
-      });
-    };
+  if ($routeParams.healthy) {
+    this.filterParams.notHealthy = false;
+  } else if ($routeParams.nothealthy) {
+    this.filterParams.notHealthy = true;
+  }
 
-    $scope.checkAll = function () {
-      _.forEach($scope.servers, function (server, index) {
-        $scope.checkAvailability(index);
-      });
-    };
+  if ($routeParams.healthcheck) {
+    this.filterParams.hasHealthcheck = true;
+  }
+};
 
-    $scope.checkAvailability = function (index) {
-      $scope.loadingAvailability[index] = true;
-      availability.checkServer($scope.servers[index])
-        .then(function () {
-          $scope.loadingAvailability[index] = false;
-        });
-    };
+ServersCtrl.prototype.load = function () {
+  var that = this;
+  this.loading = true;
 
-    $scope.healthcheck = function (index, broadcast) {
-      $scope.loadingHealthcheck[index] = true;
-      availability.healthcheck($scope.servers[index], broadcast)
-        .then(function (healthInfo) {
-          var server = $scope.servers[index];
-          server.notHealthy = !(healthInfo && healthInfo.database && healthInfo.database.healthy);
-          $scope.loadingHealthcheck[index] = false;
-        });
-    };
+  this.find(this.filterParams)
+    .then(function (servers) {
+      that.loading = false;
+      that.serversCount = servers.length;
+      that.servers = servers;
+    });
+};
 
-    function doRemove(index) {
-      var server = $scope.servers[index];
-      serversService.remove({
-        id: server.id
-      }, true).then(function () {
-        serversService.commit();
-        $scope.load();
-      });
-    }
-
-    $scope.remove = function (index) {
-      $rootScope.$broadcast('confirm-show', {
-        message: 'Are you sure? You are about to delete a server.',
-        action: function () {
-          doRemove(index);
-          $rootScope.$broadcast('confirm-hide');
-        }
-      });
-    };
-
-    $scope.load();
+ServersCtrl.prototype.checkAll = function () {
+  var that = this;
+  _.forEach(this.servers, function (server, index) {
+    that.checkAvailability(index);
   });
+};
+
+ServersCtrl.prototype.checkAvailability = function (index) {
+  var that = this;
+  this.loadingAvailability[index] = true;
+  this.checkServer(this.servers[index])
+    .then(function () {
+      that.loadingAvailability[index] = false;
+    });
+};
+
+ServersCtrl.prototype.runHealthcheck = function (index, broadcast) {
+  var that = this;
+  this.loadingHealthcheck[index] = true;
+  this.healthcheck(this.servers[index], broadcast)
+    .then(function (healthInfo) {
+      var server = that.servers[index];
+      server.notHealthy = !(healthInfo && healthInfo.database && healthInfo.database.healthy);
+      that.loadingHealthcheck[index] = false;
+    });
+};
+ServersCtrl.prototype.doRemoveServer = function (index) {
+  var that = this,
+    server = this.servers[index];
+  this.remove({
+    id: server.id
+  }, true).then(function () {
+    that.commit();
+    that.load();
+  });
+};
+ServersCtrl.prototype.removeServer = function (index) {
+  var that = this;
+  this.broadcast('confirm-show', {
+    message: 'Are you sure? You are about to delete a server.',
+    action: function () {
+      that.doRemoveServer(index);
+      that.broadcast('confirm-hide');
+    }
+  });
+};
+
+angular.module('mycsServersApp')
+  .controller('ServersCtrl', ServersCtrl);
