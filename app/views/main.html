@@ -1,11 +1,11 @@
-<div class="row marketing">
+<div class="row marketing" ng-controller="MainCtrl as main">
   <h4>Mycs Health Observer</h4>
   <p>
     This app will help you observe the servers
   </p>
 
   <h4>Tasks:</h4>
-  <ul ng-repeat="task in tasks">
+  <ul ng-repeat="task in main.tasks">
     <li>{{ task }}</li>
   </ul>
 </div>
